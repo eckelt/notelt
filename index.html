@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+            }
+            .note {
+                height: 100vh;
+                width: 100vw;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea class="note" contenteditable="true"></textarea>
+    </body>
+    <script>
+        const noteNameArr = location.href.split("/");
+        const noteName = noteNameArr[noteNameArr.length - 2];
+        let note = document.querySelector(".note");
+
+        function save() {
+            if (localStorage.getItem("note") !== note.value) {
+                localStorage.setItem("note", note.value);
+                console.log("Saved note ", noteName);
+                fetch("/api/v1/note/" + noteName, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: note.value,
+                });
+            }
+
+            setTimeout(save, 500);
+        }
+
+        window.onload = async function () {
+            const response = await fetch("/api/v1/note/" + noteName);
+            if (!response.ok) {
+                console.log(`Response status: ${response.status}`);
+            }
+            note.value = await response.text();
+            save();
+        };
+    </script>
+</html>
