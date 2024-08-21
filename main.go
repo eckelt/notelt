@@ -59,7 +59,6 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 		// write the file to the response
 		w.Write(note)
 	default:
-		fmt.Fprintf(w, "Method not allowed", r.Method)
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
