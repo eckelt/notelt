@@ -10,7 +10,7 @@ COPY . .
 RUN go get -d -v
 
 # Build the binary.
-RUN GOOS=linux go build  -ldflags="-extldflags=-static" -tags sqlite_omit_load_extension -o /go/bin/notelt
+RUN GOOS=linux CGO_ENABLED=0 go build -o /go/bin/notelt
 
 ############################
 # STEP 2 get root certificates

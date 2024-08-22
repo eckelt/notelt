@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/gomarkdown/markdown"
@@ -11,10 +13,10 @@ import (
 	"github.com/gomarkdown/markdown/parser"
 )
 
-const FOLDER = "./notes"
+var notes_folder string
 
 func getNotePath(name string) string {
-	path, _ := filepath.Abs(filepath.Join(FOLDER, filepath.Base(name+".md")))
+	path, _ := filepath.Abs(filepath.Join(notes_folder, filepath.Base(name+".md")))
 	return path
 }
 
@@ -89,10 +91,14 @@ func editorHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("Starting server", getNotePath("test"))
+	if os.Getenv("NOTES_FOLDER") == "" {
+		log.Fatal("NOTES_FOLDER environment variable must be set")
+	}
+	notes_folder = os.Getenv("NOTES_FOLDER")
+	fmt.Println("Starting server", getNotePath(""))
 	http.HandleFunc("/api/v1/note/{note}", apiHandler)
 	http.HandleFunc("/{note}", markdownHandler)
 	http.HandleFunc("/{note}/edit", editorHandler)
-	fmt.Println("Listening on port 8080")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Listening on port 8520")
+	http.ListenAndServe(":8520", nil)
 }
