@@ -22,11 +22,12 @@ RUN apk add -U --no-cache ca-certificates
 ############################
 # STEP 2 build a small image
 ############################
-FROM scratch
+FROM alpine:3.6
 COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ADD sca1b.crt /etc/ssl/certs/
 
 COPY --from=builder /go/bin/notelt .
-COPY index.html .
+COPY static/ static/
+COPY edit.html .
 CMD ["./notelt"]
 EXPOSE 8520

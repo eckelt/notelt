@@ -1,0 +1,23 @@
+html {
+    display: flex;
+    justify-content: center;
+}
+body {
+    background-color: #fefefe;
+    line-height: 1.28;
+    color: #222;
+    margin: auto;
+    max-width: 800px;
+    width: 800px;
+    min-width: 320px;
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #333;
+        color: #eee;
+    }
+}
+p,
+li {
+    padding-top: 0.5em;
+}
