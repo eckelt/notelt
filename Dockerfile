@@ -27,5 +27,6 @@ COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ADD sca1b.crt /etc/ssl/certs/
 
 COPY --from=builder /go/bin/notelt .
+COPY index.html .
 CMD ["./notelt"]
 EXPOSE 8520
