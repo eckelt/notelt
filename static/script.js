@@ -18,7 +18,7 @@ toggle_edit_mode = function () {
   }
 };
 
-var mylatesttap;
+var mylatesttap = 0;
 function doubletap() {
   var now = new Date().getTime();
   var timesince = now - mylatesttap;
@@ -26,12 +26,43 @@ function doubletap() {
     // double tap
     toggle_edit_mode();
   }
-
   mylatesttap = new Date().getTime();
 }
 
 // register the handler
 document.addEventListener("keyup", doc_keyUp, false);
-document
-  .getElementsByClassName(".toggle")
-  .addEventListener("touchstart", toggle_edit_mode, false);
+
+// edit notes
+const noteName = location.href.split("/").pop();
+
+function save() {
+  const noteValue = document.querySelector(".note").value;
+  if (localStorage.getItem("note") !== noteValue) {
+    localStorage.setItem("note", noteValue);
+    console.log("Saved note ", noteName);
+    fetch("/api/v1/note/" + noteName, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: noteValue,
+    });
+  }
+
+  setTimeout(save, 500);
+}
+
+window.onload = async function () {
+  const toggleEl = document.getElementsByClassName("toggle")[0];
+  toggleEl.addEventListener("touchstart", doubletap);
+
+  let note = document.querySelector(".note");
+  if (note !== undefined && note !== null) {
+    const response = await fetch("/api/v1/note/" + noteName);
+    if (!response.ok) {
+      console.log(`Response status: ${response.status}`);
+    }
+    note.value = await response.text();
+    save();
+  }
+};

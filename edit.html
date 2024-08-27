@@ -4,89 +4,12 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            html,
-            body {
-                margin: 0;
-                display: flex;
-                justify-content: center;
-            }
-            textarea {
-                box-sizing: border-box;
-                border: 0;
-                margin: 0 auto;
-                max-width: 800px;
-                width: 100vw;
-                border: 0;
-                padding: 1em;
-                font-family: "Fira Code", monospace;
-                font-optical-sizing: auto;
-                font-weight: 400;
-                font-style: normal;
-                outline: none;
-            }
-            @media (prefers-color-scheme: dark) {
-                body,
-                textarea {
-                    background-color: #333;
-                    color: #eee;
-                }
-            }
-            .note {
-                height: 100vh;
-                width: 100vw;
-            }
-            .toggle {
-                display: block;
-                position: absolute;
-                bottom: 1em;
-                right: 1em;
-                opacity: 0.2;
-                width: 3em;
-                height: 3em;
-                border-radius: 50%;
-            }
-        </style>
+        <link rel="stylesheet" href="/static/style.css" />
         <script src="/static/script.js"></script>
     </head>
     <body>
         <textarea class="note" contenteditable="true"></textarea>
         <div class="toggle"></div>
     </body>
-    <script>
-        const noteNameArr = location.href.split("/");
-        const noteName = noteNameArr.pop();
-        let note = document.querySelector(".note");
-
-        function save() {
-            if (localStorage.getItem("note") !== note.value) {
-                localStorage.setItem("note", note.value);
-                console.log("Saved note ", noteName);
-                fetch("/api/v1/note/" + noteName, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: note.value,
-                });
-            }
-
-            setTimeout(save, 500);
-        }
-
-        window.onload = async function () {
-            const response = await fetch("/api/v1/note/" + noteName);
-            if (!response.ok) {
-                console.log(`Response status: ${response.status}`);
-            }
-            note.value = await response.text();
-            save();
-        };
-    </script>
+    <script></script>
 </html>
